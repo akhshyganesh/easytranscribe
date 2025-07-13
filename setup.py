@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-from setuptools import setup, find_packages
 import os
+
+from setuptools import find_packages, setup
 
 
 # Read the README file
@@ -29,12 +30,15 @@ def read_requirements():
 setup(
     name="easytranscribe",
     version="0.1.1",
-    description="Easy speech-to-text transcription from audio files or live microphone input using Whisper.",
+    description=(
+        "Easy speech-to-text transcription from audio files or live "
+        "microphone input using Whisper."
+    ),
     long_description=read_readme(),
     long_description_content_type="text/markdown",
     author="akhshyganesh",
     author_email="",  # Add your email if you want
-    url="https://github.com/akhshyganesh/voice-assistant-transcriber",
+    url="https://github.com/akhshyganesh/easytranscribe",
     packages=find_packages(exclude=["test*", "tests*"]),
     install_requires=read_requirements(),
     python_requires=">=3.8",
@@ -56,7 +60,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     project_urls={
-        "Bug Reports": "https://github.com/akhshyganesh/voice-assistant-transcriber/issues",
-        "Source": "https://github.com/akhshyganesh/voice-assistant-transcriber",
+        "Bug Reports": "https://github.com/akhshyganesh/easytranscribe/issues",
+        "Source": "https://github.com/akhshyganesh/easytranscribe",
     },
 )

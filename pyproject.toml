@@ -15,13 +15,13 @@ requires-python = ">=3.8"
 keywords = ["speech-to-text", "whisper", "transcription", "audio", "ai"]
 classifiers = [
     "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers", 
+    "Intended Audience :: Developers",
     "Topic :: Multimedia :: Sound/Audio :: Speech",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9", 
+    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -34,9 +34,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/akhshyganesh/voice-assistant-transcriber"
-"Bug Reports" = "https://github.com/akhshyganesh/voice-assistant-transcriber/issues"
-"Source Code" = "https://github.com/akhshyganesh/voice-assistant-transcriber"
+Homepage = "https://github.com/akhshyganesh/easytranscribe"
+"Bug Reports" = "https://github.com/akhshyganesh/easytranscribe/issues"
+"Source Code" = "https://github.com/akhshyganesh/easytranscribe"
 
 [project.scripts]
 easytranscribe = "easytranscribe.cli:main"
@@ -61,7 +61,7 @@ line-length = 88
 target-version = ['py38']
 
 [tool.mypy]
-python_version = "0.1.1"
+python_version = "3.8"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
