@@ -29,7 +29,7 @@ def read_requirements():
 
 setup(
     name="easytranscribe",
-    version="0.1.1",
+    version="0.1.2",
     description=(
         "Easy speech-to-text transcription from audio files or live "
         "microphone input using Whisper."
