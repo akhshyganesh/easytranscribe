@@ -1,6 +1,6 @@
-# Voice Assistant Transcriber
+# EasyTranscribe
 
-A simple Python-based voice assistant that captures speech from your microphone, detects silence, and transcribes spoken words to text using OpenAI Whisper. Easily extensible for integration with LLMs like Ollama or Gemma.
+A simple Python-based voice assistant that captures speech from your microphone or from recorded file, detects silence, and transcribes spoken words to text using OpenAI Whisper. Easily extensible for integration with LLMs like Ollama or Gemma.
 
 ## Features
 
@@ -14,8 +14,8 @@ A simple Python-based voice assistant that captures speech from your microphone,
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/akhshyganesh/voice-assistant-transcriber.git
-   cd voice-assistant-transcriber
+   git clone https://github.com/akhshyganesh/easytranscribe.git
+   cd easytranscribe
    ```
 
 2. Install dependencies:
@@ -144,8 +144,8 @@ Transcriptions are automatically logged to `logs/transcription_YYYY-MM-DD.log` w
 ### Install from Source
 
 ```bash
-git clone https://github.com/akhshyganesh/voice-assistant-transcriber.git
-cd voice-assistant-transcriber
+git clone https://github.com/akhshyganesh/easytranscribe.git
+cd easytranscribe
 pip install -e .
 ```
 
@@ -161,6 +161,20 @@ python test/test_integration.py
 - OpenAI Whisper
 - sounddevice (for microphone input)
 - numpy
+
+## 📖 Documentation
+
+For comprehensive documentation, examples, and API reference, visit:
+
+**🌐 [EasyTranscribe Documentation](https://akhshyganesh.github.io/easytranscribe/)**
+
+The documentation includes:
+- 🚀 [Quick Start Guide](https://akhshyganesh.github.io/easytranscribe/quickstart/)
+- 💻 [CLI Usage](https://akhshyganesh.github.io/easytranscribe/cli/)
+- 🐍 [Python API](https://akhshyganesh.github.io/easytranscribe/api/)
+- 📝 [Examples](https://akhshyganesh.github.io/easytranscribe/examples/)
+- ⚙️ [Configuration](https://akhshyganesh.github.io/easytranscribe/configuration/)
+- 🔧 [Advanced Usage](https://akhshyganesh.github.io/easytranscribe/advanced/)
 
 ## 🤝 Contributing
 
