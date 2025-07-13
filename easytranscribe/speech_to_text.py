@@ -8,12 +8,17 @@ from typing import Optional
 from easytranscribe.transcription_logger import log_transcription
 
 
-def capture_and_transcribe(model_name: str = "turbo") -> str:
+def capture_and_transcribe(model_name: str = "turbo", verbose: bool = False) -> str:
     """
     Captures audio from microphone and transcribes to text using Whisper.
     Waits for user to start speaking, then stops after 3 seconds of silence.
+
+    Args:
+        model_name: Whisper model to use for transcription
+        verbose: If True, shows detailed recording and processing information
     """
-    print("Speak into the microphone...")
+    if verbose:
+        print("Speak into the microphone...")
 
     # Audio settings
     samplerate = 16000
@@ -23,7 +28,8 @@ def capture_and_transcribe(model_name: str = "turbo") -> str:
     silence_duration = 3.0  # seconds of silence before stopping
     min_recording_time = 2.0  # minimum recording time after speech starts
 
-    print(f"Listening... (will stop after {silence_duration} seconds of silence)")
+    if verbose:
+        print(f"Listening... (will stop after {silence_duration} seconds of silence)")
 
     # Recording state
     audio_data = []
@@ -52,7 +58,8 @@ def capture_and_transcribe(model_name: str = "turbo") -> str:
                         started_speaking = True
                         recording_start_time = current_time
                         last_speech_time = current_time
-                        print("Started speaking... Recording now.")
+                        if verbose:
+                            print("Started speaking... Recording now.")
                     continue
 
                 # Update last speech time if not silent
@@ -73,13 +80,14 @@ def capture_and_transcribe(model_name: str = "turbo") -> str:
                     and (current_time - last_speech_time) >= silence_duration
                 ):
                     silence_time = current_time - last_speech_time
-                    print(
-                        f"Detected {silence_time:.1f} seconds of silence. Stopping recording."
-                    )
+                    if verbose:
+                        print(
+                            f"Detected {silence_time:.1f} seconds of silence. Stopping recording."
+                        )
                     break
 
                 # Debug output every few seconds
-                if recording_start_time is not None:
+                if recording_start_time is not None and verbose:
                     recording_time = current_time - recording_start_time
                     if (
                         int(recording_time) % 3 == 0
@@ -93,17 +101,20 @@ def capture_and_transcribe(model_name: str = "turbo") -> str:
                         )
 
     except KeyboardInterrupt:
-        print("\nRecording interrupted by user.")
+        if verbose:
+            print("\nRecording interrupted by user.")
 
     if not audio_data:
-        print("No audio recorded.")
+        if verbose:
+            print("No audio recorded.")
         return ""
 
     # Calculate audio duration
     audio = np.concatenate(audio_data)
     audio_duration = len(audio) / samplerate
-    print(f"Recording complete. Recorded {audio_duration:.1f} seconds of audio.")
-    print("Transcribing...")
+    if verbose:
+        print(f"Recording complete. Recorded {audio_duration:.1f} seconds of audio.")
+        print("Transcribing...")
 
     # Transcribe with Whisper and measure processing time
     transcription_start_time = time.time()
@@ -112,7 +123,8 @@ def capture_and_transcribe(model_name: str = "turbo") -> str:
     transcribed_text = result["text"].strip()
     processing_time = time.time() - transcription_start_time
 
-    print("Transcribed text:", transcribed_text)
+    if verbose:
+        print("Transcribed text:", transcribed_text)
 
     # Log the transcription
     try:
@@ -122,44 +134,52 @@ def capture_and_transcribe(model_name: str = "turbo") -> str:
             audio_duration=audio_duration,
             processing_time=processing_time,
         )
-        print(
-            f"Transcription logged successfully (Duration: {audio_duration:.1f}s, Processing: {processing_time:.1f}s)"
-        )
+        if verbose:
+            print(
+                f"Transcription logged successfully (Duration: {audio_duration:.1f}s, Processing: {processing_time:.1f}s)"
+            )
     except Exception as e:
-        print(f"Warning: Failed to log transcription: {e}")
+        if verbose:
+            print(f"Warning: Failed to log transcription: {e}")
 
     return transcribed_text
 
-def transcribe_audio_file(filepath: str, model_name: str = "turbo") -> str:
+
+def transcribe_audio_file(
+    filepath: str, model_name: str = "turbo", verbose: bool = False
+) -> str:
     """
     Transcribes an audio file to text using Whisper.
-    
+
     Args:
         filepath: Path to the audio file
         model_name: Whisper model to use for transcription
-        
+        verbose: If True, shows detailed processing information
+
     Returns:
         Transcribed text from the audio file
-        
+
     Raises:
         FileNotFoundError: If the audio file doesn't exist
         Exception: If transcription fails
     """
     import os
-    
+
     if not os.path.exists(filepath):
         raise FileNotFoundError(f"Audio file not found: {filepath}")
-    
-    print(f"Transcribing file: {filepath}")
+
+    if verbose:
+        print(f"Transcribing file: {filepath}")
     transcription_start_time = time.time()
-    
+
     try:
         model = whisper.load_model(model_name)
         result = model.transcribe(filepath, fp16=False)
         transcribed_text = result["text"].strip()
         processing_time = time.time() - transcription_start_time
 
-        print("Transcribed text:", transcribed_text)
+        if verbose:
+            print("Transcribed text:", transcribed_text)
 
         # Log the transcription
         try:
@@ -168,16 +188,19 @@ def transcribe_audio_file(filepath: str, model_name: str = "turbo") -> str:
                 transcribed_text=transcribed_text,
                 audio_duration=None,
                 processing_time=processing_time,
-                audio_file=filepath
+                audio_file=filepath,
             )
-            print(
-                f"Transcription logged successfully (File: {filepath}, Processing: {processing_time:.1f}s)"
-            )
+            if verbose:
+                print(
+                    f"Transcription logged successfully (File: {filepath}, Processing: {processing_time:.1f}s)"
+                )
         except Exception as e:
-            print(f"Warning: Failed to log transcription: {e}")
+            if verbose:
+                print(f"Warning: Failed to log transcription: {e}")
 
         return transcribed_text
-        
+
     except Exception as e:
-        print(f"Error during transcription: {e}")
+        if verbose:
+            print(f"Error during transcription: {e}")
         raise

@@ -3,25 +3,28 @@
 from setuptools import setup, find_packages
 import os
 
+
 # Read the README file
 def read_readme():
-    readme_path = os.path.join(os.path.dirname(__file__), 'README.md')
+    readme_path = os.path.join(os.path.dirname(__file__), "README.md")
     if os.path.exists(readme_path):
-        with open(readme_path, 'r', encoding='utf-8') as f:
+        with open(readme_path, "r", encoding="utf-8") as f:
             return f.read()
-    return ''
+    return ""
+
 
 # Read requirements
 def read_requirements():
-    req_path = os.path.join(os.path.dirname(__file__), 'requirements.txt')
+    req_path = os.path.join(os.path.dirname(__file__), "requirements.txt")
     requirements = []
     if os.path.exists(req_path):
-        with open(req_path, 'r', encoding='utf-8') as f:
+        with open(req_path, "r", encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
-                if line and not line.startswith('#'):
+                if line and not line.startswith("#"):
                     requirements.append(line)
     return requirements
+
 
 setup(
     name="easytranscribe",
@@ -32,12 +35,12 @@ setup(
     author="akhshyganesh",
     author_email="",  # Add your email if you want
     url="https://github.com/akhshyganesh/voice-assistant-transcriber",
-    packages=find_packages(exclude=['test*', 'tests*']),
+    packages=find_packages(exclude=["test*", "tests*"]),
     install_requires=read_requirements(),
     python_requires=">=3.8",
     include_package_data=True,
     zip_safe=False,
-    keywords=['speech-to-text', 'whisper', 'transcription', 'audio', 'ai'],
+    keywords=["speech-to-text", "whisper", "transcription", "audio", "ai"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
@@ -53,7 +56,7 @@ setup(
         "Operating System :: OS Independent",
     ],
     project_urls={
-        'Bug Reports': 'https://github.com/akhshyganesh/voice-assistant-transcriber/issues',
-        'Source': 'https://github.com/akhshyganesh/voice-assistant-transcriber',
+        "Bug Reports": "https://github.com/akhshyganesh/voice-assistant-transcriber/issues",
+        "Source": "https://github.com/akhshyganesh/voice-assistant-transcriber",
     },
 )

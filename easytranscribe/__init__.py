@@ -15,7 +15,7 @@ from .view_logs import view_logs, get_available_log_dates
 __all__ = [
     "__version__",
     "capture_and_transcribe",
-    "transcribe_audio_file", 
+    "transcribe_audio_file",
     "view_logs",
-    "get_available_log_dates"
+    "get_available_log_dates",
 ]

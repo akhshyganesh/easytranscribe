@@ -11,7 +11,7 @@ def main():
     """Main function to demonstrate live transcription."""
     try:
         print("🎤 Starting live transcription...")
-        text = capture_and_transcribe(model_name="base")
+        text = capture_and_transcribe(model_name="base", verbose=True)
         print(f"📝 Transcribed: {text}")
         # Here you can send 'text' to other services for further processing
     except KeyboardInterrupt:
@@ -23,11 +23,11 @@ def main():
 if __name__ == "__main__":
     print("🚀 EasyTranscribe Demo")
     print("Press Ctrl+C to stop at any time")
-    
+
     while True:
         try:
             main()
-            print("\n" + "="*50)
+            print("\n" + "=" * 50)
             input("Press Enter to transcribe again or Ctrl+C to exit...")
         except KeyboardInterrupt:
             print("\n👋 Goodbye!")

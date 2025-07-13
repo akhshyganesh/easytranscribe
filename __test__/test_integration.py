@@ -71,11 +71,11 @@ def test_integration():
         from easytranscribe.view_logs import view_logs, get_available_log_dates
 
         print("   ✅ Log viewer module imported successfully")
-        
+
         # Test getting available dates
         dates = get_available_log_dates()
         print(f"   ✅ Found {len(dates)} log dates")
-        
+
         # Test viewing logs
         logs = view_logs(date="today", stats=True)
         if "entries" in logs:

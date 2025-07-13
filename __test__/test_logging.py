@@ -69,12 +69,12 @@ class TestTranscriptionLogging(unittest.TestCase):
             model_name=self.test_model,
             transcribed_text=self.test_text,
         )
-        
+
         # Check if log file exists
         current_date = datetime.now().strftime("%Y-%m-%d")
         log_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs")
         log_file = os.path.join(log_dir, f"transcription_{current_date}.log")
-        
+
         self.assertTrue(os.path.exists(log_file), "Log file was not created")
         print("✅ Log file creation test passed")
 
