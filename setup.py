@@ -28,7 +28,7 @@ def read_requirements():
 
 setup(
     name="easytranscribe",
-    version="0.1.0",
+    version="0.1.1",
     description="Easy speech-to-text transcription from audio files or live microphone input using Whisper.",
     long_description=read_readme(),
     long_description_content_type="text/markdown",
