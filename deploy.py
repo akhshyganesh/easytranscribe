@@ -157,16 +157,12 @@ class EasyTranscribeDeployment:
         return tag_name
 
     def _push_to_branch(self, new_version: str):
-        """Push changes to a new branch."""
+        """Create and checkout a new branch for the release."""
         branch_name = f"release-{new_version}"
-        print(f"🚀 Pushing to branch: {branch_name}")
+        print(f"🚀 Creating release branch: {branch_name}")
 
         # Create and checkout new branch
         self._run_command(f"git checkout -b {branch_name}")
-
-        # Push branch and tags
-        self._run_command(f"git push origin {branch_name}")
-        self._run_command(f"git push origin v{new_version}")
 
         return branch_name
 
@@ -276,6 +272,72 @@ Ready for merge and PyPI publication.
 
         print("   ✅ Environment validation passed!")
 
+    def _finalize_deployment(self, new_version: str, branch_name: str, tag_name: str):
+        """Finalize deployment by pushing to upstream and returning to develop branch."""
+        print(f"🔄 Finalizing deployment...")
+        
+        # Get current branch (should be the release branch)
+        current_branch_result = self._run_command("git branch --show-current")
+        current_branch = current_branch_result.stdout.strip()
+        
+        print(f"   Current branch: {current_branch}")
+        
+        # Push all changes to upstream (origin)
+        try:
+            print("📤 Pushing changes to upstream...")
+            
+            # Push the release branch
+            self._run_command(f"git push -u origin {branch_name}")
+            
+            # Push the tag
+            self._run_command(f"git push origin {tag_name}")
+            
+            # Also push to upstream if it's different from origin
+            try:
+                upstream_result = self._run_command("git remote get-url upstream", check=False)
+                if upstream_result.returncode == 0 and upstream_result.stdout.strip():
+                    print("   Detected upstream remote, pushing there too...")
+                    self._run_command(f"git push upstream {branch_name}")
+                    self._run_command(f"git push upstream {tag_name}")
+            except subprocess.CalledProcessError:
+                # Upstream remote doesn't exist, which is fine
+                pass
+            
+        except subprocess.CalledProcessError as e:
+            print(f"   ⚠️  Warning: Failed to push to upstream: {e}")
+            print("   You may need to push manually later")
+        
+        # Switch back to develop branch
+        try:
+            print("🔄 Switching back to develop branch...")
+            
+            # Check for any uncommitted changes before switching
+            status_result = self._run_command("git status --porcelain")
+            if status_result.stdout.strip():
+                print("   ⚠️  Warning: Uncommitted changes detected, committing them first...")
+                self._run_command("git add -A")
+                self._run_command('git commit -m "Additional changes during deployment"')
+            
+            # Check if develop branch exists
+            develop_exists = self._run_command("git branch --list develop", check=False)
+            
+            if develop_exists.returncode == 0 and "develop" in develop_exists.stdout:
+                # Switch to develop branch
+                self._run_command("git checkout develop")
+                
+                # Pull latest changes from origin/develop
+                try:
+                    self._run_command("git pull origin develop")
+                    print("   ✅ Successfully returned to develop branch and updated")
+                except subprocess.CalledProcessError:
+                    print("   ✅ Returned to develop branch (no updates pulled)")
+            else:
+                print("   ⚠️  develop branch not found, staying on current branch")
+                
+        except subprocess.CalledProcessError as e:
+            print(f"   ⚠️  Warning: Failed to switch to develop branch: {e}")
+            print(f"   You may need to manually checkout develop: git checkout develop")
+
     def deploy(self, bump_type: Optional[str] = None):
         """Run the complete deployment process."""
         try:
@@ -366,10 +428,14 @@ Ready for merge and PyPI publication.
                 print("     python -m build")
                 print("     python -m twine upload dist/*")
 
+            # Return to develop branch and push changes upstream
+            self._finalize_deployment(new_version, branch_name, tag_name)
+
             print(f"\n🎉 Deployment completed successfully!")
             print(f"   New version: {new_version}")
             print(f"   Branch: {branch_name}")
             print(f"   Tag: {tag_name}")
+            print(f"   Returned to develop branch")
 
         except KeyboardInterrupt:
             print("\n❌ Deployment cancelled by user")
